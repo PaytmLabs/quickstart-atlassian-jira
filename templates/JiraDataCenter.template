@@ -43,6 +43,7 @@
                     "AssociatePublicIpAddress",
                     "KeyName",
                     "CustomDnsName",
+                    "SSLCertificateType",
                     "SSLCertificateName"
                 ]
             }, {
@@ -98,7 +99,10 @@
                     "default": "Existing DNS name (optional)"
                 },
                 "SSLCertificateName": {
-                    "default": "SSL Certificate Name"
+                    "default": "SSL Certificate Name or ARN reference"
+                },
+                "SSLCertificateType": {
+                    "default": "SSL Certificate Name Reference Type (iam or arn)"
                 },
                 "ExternalSubnets": {
                     "default": "External subnets *"
@@ -246,11 +250,19 @@
             "Type": "String"
         },
         "SSLCertificateName": {
-            "Description": "The name of your Server Certificate to use for HTTPS.  Leave blank if you don't want to set up HTTPS at this time",
+            "Description": "The name of your Server Certificate to use for HTTPS when using IAM, or the full ARN of your ACM certificate when using ACM.  Leave blank if you don't want to set up HTTPS at this time",
             "Type": "String",
-            "MinLength": "0",
-            "MaxLength": "32",
             "Default": ""
+        },
+        "SSLCertificateType": {
+            "Description": "The type of reference contained in SSLCertificateName, iam or arn (acm)",
+            "Type": "String",
+            "Default": "iam",
+            "AllowedValues": [
+                "iam",
+                "arn"
+            ],
+            "ConstraintDescription": "Must be 'iam' or 'arn'."
         },
         "StartCollectd": {
             "Description": "Should the collectd service be started",
@@ -319,6 +331,13 @@
                     ""
                 ]
             }]
+        },
+        "DoSSLAsARN": {
+            "Fn::Equals": [{
+                    "Ref": "SSLCertificateType"
+                },
+                "arn"
+            ]
         }
     },
     "Mappings": {
@@ -968,15 +987,21 @@
                                 "JSessionIdStickiness"
                             ],
                             "SSLCertificateId": {
-                                "Fn::Join": [
-                                    "", [
-                                        "arn:aws:iam::", {
-                                            "Ref": "AWS::AccountId"
-                                        },
-                                        ":server-certificate/", {
-                                            "Ref": "SSLCertificateName"
-                                        }
-                                    ]
+                                "Fn::If": [
+                                    "DoSSLAsARN", {
+                                        "Ref": "SSLCertificateName"
+                                    }, {
+                                        "Fn::Join": [
+                                            "", [
+                                                "arn:aws:iam::", {
+                                                    "Ref": "AWS::AccountId"
+                                                },
+                                                ":server-certificate/", {
+                                                    "Ref": "SSLCertificateName"
+                                                }
+                                            ]
+                                        ]
+                                    }
                                 ]
                             }
                         }, {
