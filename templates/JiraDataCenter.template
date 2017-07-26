@@ -669,6 +669,9 @@
                                     ]
                                 }
                             },
+                            "/root/atl-init-jira.patch": {
+                                "source": "https://paytmlabs-atlassian-software.s3.amazonaws.com/patches/atl-init-jira.patch"
+                            },
                             "/etc/cfn/cfn-hup.conf": {
                                 "content": {
                                     "Fn::Join": [
@@ -741,6 +744,10 @@
                             },
                             "030_mount_all": {
                                 "command": "mount -a",
+                                "ignoreErrors": "false"
+                            },
+                            "035_patch_atl_jira_init": {
+                                "command": "patch /etc/init.d/atl-init-jira /root/atl-init-jira.patch",
                                 "ignoreErrors": "false"
                             },
                             "040_make_shared_home_dir": {
