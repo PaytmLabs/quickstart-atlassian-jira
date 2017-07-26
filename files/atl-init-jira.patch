@@ -1,0 +1,11 @@
+--- atl-init-jira.orig	2017-07-26 13:28:12.404896911 +0000
++++ atl-init-jira	2017-07-26 13:29:59.431821309 +0000
+@@ -30,7 +30,7 @@
+ 
+ ATL_JIRA_USER="jira" #you don't get to choose user name. Installer creates user 'jira' and that's it
+ 
+-ATL_JIRA_RELEASES_S3_URL="https://s3.amazonaws.com/${ATL_RELEASE_S3_BUCKET}/${ATL_RELEASE_S3_PATH}/${ATL_JIRA_NAME}"
++ATL_JIRA_RELEASES_S3_URL="https://${ATL_RELEASE_S3_BUCKET}.s3.amazonaws.com/${ATL_RELEASE_S3_PATH}/${ATL_JIRA_NAME}"
+ 
+ function start {
+     atl_log "=== BEGIN: service atl-init-jira start ==="
