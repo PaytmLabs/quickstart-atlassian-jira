@@ -746,6 +746,10 @@
                                 "command": "mount -a",
                                 "ignoreErrors": "false"
                             },
+                            "034_yum_install_patch": {
+                                "command": "yum -y install patch",
+                                "ignoreErrors": "false"
+                            },
                             "035_patch_atl_jira_init": {
                                 "command": "patch /etc/init.d/atl-init-jira /root/atl-init-jira.patch",
                                 "ignoreErrors": "false"
