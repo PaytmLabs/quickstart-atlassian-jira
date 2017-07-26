@@ -51,6 +51,8 @@
                     "default": "Advanced (Optional)"
                 },
                 "Parameters": [
+                    "AtlReleaseS3Bucket",
+                    "AtlReleaseS3Path",
                     "CatalinaOpts",
                     "DatadogApiKey",
                     "DatadogTags",
@@ -60,6 +62,12 @@
             "ParameterLabels": {
                 "AssociatePublicIpAddress": {
                     "default": "Assign public IP"
+                },
+                "AtlReleaseS3Bucket": {
+                    "default": "Bucket for Jira Installers"
+                },
+                "AtlReleaseS3Path": {
+                    "default": "Bucket Path for Jira Installers"
                 },
                 "CatalinaOpts": {
                     "default": "Catalina options"
@@ -134,6 +142,16 @@
                 "false"
             ],
             "ConstraintDescription": "Must be 'true' or 'false'."
+        },
+        "AtlReleaseS3Bucket": {
+            "Description": "S3 bucket where Jira release installers are pulled during bootstrap",
+            "Type": "String",
+            "Default": "atlassian-software"
+        },
+        "AtlReleaseS3Path": {
+            "Description": "Path in S3 bucket where Jira release installers are pulled during bootstrap",
+            "Type": "String",
+            "Default": "releases"
         },
         "ClusterNodeMax": {
             "Type": "Number",
@@ -669,8 +687,14 @@
                                                 ]
                                             },
                                             "\n",
-                                            "ATL_RELEASE_S3_BUCKET=atlassian-software\n",
-                                            "ATL_RELEASE_S3_PATH=releases\n",
+                                            "ATL_RELEASE_S3_BUCKET=", {
+                                                "Ref": "AtlReleaseS3Bucket"
+                                            }
+                                            "\n",
+                                            "ATL_RELEASE_S3_PATH=", {
+                                                "Ref": "AtlReleaseS3Path"
+                                            }
+                                            "\n",
 
                                             "ATL_POSTGRES_ENABLED=false\n",
                                             "ATL_PROXY_NAME=", {
