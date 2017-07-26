@@ -102,7 +102,7 @@
                     "default": "SSL Certificate Name or ARN reference"
                 },
                 "SSLCertificateType": {
-                    "default": "SSL Certificate Name Reference Type (iam or arn)"
+                    "default": "SSL Certificate Reference Type"
                 },
                 "ExternalSubnets": {
                     "default": "External subnets *"
