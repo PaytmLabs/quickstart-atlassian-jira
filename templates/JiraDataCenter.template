@@ -689,11 +689,11 @@
                                             "\n",
                                             "ATL_RELEASE_S3_BUCKET=", {
                                                 "Ref": "AtlReleaseS3Bucket"
-                                            }
+                                            },
                                             "\n",
                                             "ATL_RELEASE_S3_PATH=", {
                                                 "Ref": "AtlReleaseS3Path"
-                                            }
+                                            },
                                             "\n",
 
                                             "ATL_POSTGRES_ENABLED=false\n",
