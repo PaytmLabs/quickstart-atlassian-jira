@@ -52,6 +52,8 @@
                 },
                 "Parameters": [
                     "CatalinaOpts",
+                    "DatadogApiKey",
+                    "DatadogTags",
                     "StartCollectd"
                 ]
             }],
@@ -70,6 +72,12 @@
                 },
                 "ClusterNodeInstanceType": {
                     "default": "JIRA cluster node instance type"
+                },
+                "DatadogApiKey": {
+                    "default": "DataDog API key"
+                },
+                "DatadogTags": {
+                    "default": "DataDog Tags to apply to instances"
                 },
                 "DBInstanceClass": {
                     "default": "Database instance class"
@@ -157,6 +165,14 @@
             "Description": "Instance type for the cluster nodes."
         },
         "CatalinaOpts": {
+            "Type": "String",
+            "Default": ""
+        },
+        "DatadogApiKey": {
+            "Type": "String",
+            "Default": ""
+        },
+        "DatadogTags": {
             "Type": "String",
             "Default": ""
         },
@@ -304,6 +320,24 @@
                 },
                 "true"
             ]
+        },
+        "DoDatadog": {
+            "Fn::Not": [{
+                "Fn::Equals": [{
+                        "Ref": "DatadogApiKey"
+                    },
+                    ""
+                ]
+            }]
+        },
+        "DoDatadogTags": {
+            "Fn::Not": [{
+                "Fn::Equals": [{
+                        "Ref": "DatadogTags"
+                    },
+                    ""
+                ]
+            }]
         },
         "DoSetDBMasterUserPassword": {
             "Fn::Not": [{
@@ -704,6 +738,43 @@
                                         ]
                                     ]
                                 }
+                            },
+                            "/etc/dd-agent/datadog.conf": {
+                                "content": {
+                                    "Fn::If": [
+                                        "DoDatadog", {
+                                            "Fn::Join": [
+                                                "", [
+                                                    "[Main]\n",
+                                                    "dd_url: https://app.datadoghq.com\n",
+                                                    "api_key: ", {
+                                                        "Ref": "DatadogApiKey"
+                                                    },
+                                                    "\n",
+                                                    "log_to_syslog: no\n",
+                                                    {
+                                                        "Fn::If": [
+                                                            "DoDatadogTags", {
+                                                                "Fn::Join": [
+                                                                    "", [
+                                                                        "tags: ", {
+                                                                            "Ref": "DatadogTags"
+                                                                        },
+                                                                        "\n"
+                                                                    ]
+                                                                ]
+                                                            },
+                                                            "\n"
+                                                        ]
+                                                    }
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "Ref": "AWS::NoValue"
+                                        }
+                                    ]
+                                }
                             }
                         },
                         "commands": {
@@ -741,6 +812,24 @@
                             "040_make_shared_home_dir": {
                                 "command": "mkdir -p /media/atl/jira/shared",
                                 "ignoreErrors": "false"
+                            },
+                            "050_install_datadog": {
+                                "command": {
+                                    "Fn::If": [
+                                        "DoDatadog", {
+                                            "Fn::Join": [
+                                                "", [
+                                                    "DD_API_KEY=",
+                                                    {
+                                                        "Ref": "DatadogApiKey"
+                                                    },
+                                                    " bash -c \"$(curl -L https://raw.githubusercontent.com/DataDog/dd-agent/master/packaging/datadog-agent/source/install_agent.sh)\""
+                                                ]
+                                            ]
+                                        },
+                                        "echo \"Datadog not configured\""
+                                    ]
+                                }
                             }
                         },
                         "services": {
@@ -756,6 +845,16 @@
                                 "collectd": {
                                     "Fn::If": [
                                         "DoCollectd", {
+                                            "enabled": "true",
+                                            "ensureRunning": "true"
+                                        }, {
+                                            "Ref": "AWS::NoValue"
+                                        }
+                                    ]
+                                },
+                                "datadog-agent": {
+                                    "Fn::If": [
+                                        "DoDatadog", {
                                             "enabled": "true",
                                             "ensureRunning": "true"
                                         }, {
