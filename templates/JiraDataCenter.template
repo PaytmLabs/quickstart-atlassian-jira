@@ -56,6 +56,8 @@
                     "CatalinaOpts",
                     "DatadogApiKey",
                     "DatadogTags",
+                    "JVMHeapMinimum",
+                    "JVMHeapMaximum",
                     "StartCollectd"
                 ]
             }],
@@ -107,6 +109,12 @@
                 },
                 "JiraProduct": {
                     "default": "JIRA Product *"
+                },
+                "JVMHeapMinimum": {
+                    "default": "Minimum JVM Heap Size"
+                },
+                "JVMHeapMaximum": {
+                    "default": "Minimum JVM Heap Size"
                 },
                 "KeyName": {
                     "default": "Key Name *"
@@ -181,6 +189,14 @@
             ],
             "ConstraintDescription": "Must be an EC2 instance type in the C3, I2, R3, or X1 family, 'xlarge' or larger",
             "Description": "Instance type for the cluster nodes."
+        },
+        "JVMHeapMinimum": {
+            "Type": "String",
+            "Default": "384m"
+        },
+        "JVMHeapMaximum": {
+            "Type": "String",
+            "Default": "768m"
         },
         "CatalinaOpts": {
             "Type": "String",
@@ -617,6 +633,14 @@
                                         "", [
                                             "ATL_NGINX_ENABLED=false\n",
                                             "ATL_APP_DATA_MOUNT_ENABLED=false\n",
+                                            "ATL_JVM_MIN_MEMORY=", {
+                                                "Ref": "JVMHeapMinimum"
+                                            },
+                                            "\n",
+                                            "ATL_JVM_MAX_MEMORY=", {
+                                                "Ref": "JVMHeapMaximum"
+                                            },
+                                            "\n",
                                             "ATL_DB_NAME=jira\n",
                                             "ATL_DB_USER=jira\n",
                                             "ATL_DB_PASSWORD=", {
@@ -724,6 +748,9 @@
                             },
                             "/root/atl-init-jira.patch": {
                                 "source": "https://paytmlabs-atlassian-software.s3.amazonaws.com/patches/atl-init-jira.patch"
+                            },
+                            "/root/atl-init-jira-heap.patch": {
+                                "source": "https://paytmlabs-atlassian-software.s3.amazonaws.com/patches/atl-init-jira-heap.patch"
                             },
                             "/etc/cfn/cfn-hup.conf": {
                                 "content": {
@@ -842,6 +869,10 @@
                             },
                             "035_patch_atl_jira_init": {
                                 "command": "patch /etc/init.d/atl-init-jira /root/atl-init-jira.patch",
+                                "ignoreErrors": "false"
+                            },
+                            "036_patch_atl_jira_init_heap": {
+                                "command": "patch /etc/init.d/atl-init-jira /root/atl-init-jira-heap.patch",
                                 "ignoreErrors": "false"
                             },
                             "040_make_shared_home_dir": {
