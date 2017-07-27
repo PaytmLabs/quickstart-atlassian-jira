@@ -51,6 +51,8 @@
                 },
                 "Parameters": [
                     "CatalinaOpts",
+                    "JVMHeapMinimum",
+                    "JVMHeapMaximum",
                     "StartCollectd"
                 ]
             }],
@@ -90,6 +92,12 @@
                 },
                 "JiraProduct": {
                     "default": "JIRA Product *"
+                },
+                "JVMHeapMinimum": {
+                    "default": "Minimum JVM Heap Size"
+                },
+                "JVMHeapMaximum": {
+                    "default": "Minimum JVM Heap Size"
                 },
                 "KeyName": {
                     "default": "Key Name *"
@@ -151,6 +159,14 @@
             ],
             "ConstraintDescription": "Must be an EC2 instance type in the C3, I2, R3, or X1 family, 'xlarge' or larger",
             "Description": "Instance type for the cluster nodes."
+        },
+        "JVMHeapMinimum": {
+            "Type": "String",
+            "Default": "384m"
+        },
+        "JVMHeapMaximum": {
+            "Type": "String",
+            "Default": "768m"
         },
         "CatalinaOpts": {
             "Type": "String",
@@ -546,6 +562,14 @@
                                         "", [
                                             "ATL_NGINX_ENABLED=false\n",
                                             "ATL_APP_DATA_MOUNT_ENABLED=false\n",
+                                            "ATL_JVM_MIN_MEMORY=", {
+                                                "Ref": "JVMHeapMinimum"
+                                            },
+                                            "\n",
+                                            "ATL_JVM_MAX_MEMORY=", {
+                                                "Ref": "JVMHeapMaximum"
+                                            },
+                                            "\n",
                                             "ATL_DB_NAME=jira\n",
                                             "ATL_DB_USER=jira\n",
                                             "ATL_DB_PASSWORD=", {
