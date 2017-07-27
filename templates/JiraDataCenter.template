@@ -669,6 +669,9 @@
                                     ]
                                 }
                             },
+                            "/root/atl-init-jira-heap.patch": {
+                                "source": "https://paytmlabs-atlassian-software.s3.amazonaws.com/patches/atl-init-jira-heap.patch"
+                            },
                             "/etc/cfn/cfn-hup.conf": {
                                 "content": {
                                     "Fn::Join": [
@@ -741,6 +744,14 @@
                             },
                             "030_mount_all": {
                                 "command": "mount -a",
+                                "ignoreErrors": "false"
+                            },
+                            "034_yum_install_patch": {
+                                "command": "yum -y install patch",
+                                "ignoreErrors": "false"
+                            },
+                            "036_patch_atl_jira_init_heap": {
+                                "command": "patch /etc/init.d/atl-init-jira /root/atl-init-jira-heap.patch",
                                 "ignoreErrors": "false"
                             },
                             "040_make_shared_home_dir": {
