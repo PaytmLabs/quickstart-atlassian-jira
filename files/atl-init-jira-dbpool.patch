@@ -1,0 +1,22 @@
+--- orig/atl-init-jira	2017-07-27 10:43:15.164967500 -0400
++++ atl-init-jira	2017-07-27 11:14:58.616791839 -0400
+@@ -141,8 +141,8 @@
+     <driver-class>$1</driver-class>
+     <username>$3</username>
+     <password>$4</password>
+-    <pool-min-size>20</pool-min-size>
+-    <pool-max-size>20</pool-max-size>
++    <pool-min-size>$5</pool-min-size>
++    <pool-max-size>$6</pool-max-size>
+     <pool-max-wait>30000</pool-max-wait>
+     <validation-query>select 1</validation-query>
+     <min-evictable-idle-time-millis>60000</min-evictable-idle-time-millis>
+@@ -172,7 +172,7 @@
+             atl_createRemoteDb "${ATL_JIRA_SHORT_DISPLAY_NAME}" "${ATL_DB_NAME}" "${ATL_JDBC_USER}" "${ATL_DB_HOST}" "${ATL_DB_PORT}" "C" "C" "template0"
+         fi
+ 
+-        configureDbProperties "${ATL_JDBC_DRIVER}" "${ATL_JDBC_URL}" "${ATL_JDBC_USER}" "${ATL_JDBC_PASSWORD}"
++        configureDbProperties "${ATL_JDBC_DRIVER}" "${ATL_JDBC_URL}" "${ATL_JDBC_USER}" "${ATL_JDBC_PASSWORD}" "${ATL_DB_MIN_POOL_SIZE}" "${ATL_DB_MAX_POOL_SIZE}"
+     fi
+ }
+ 
