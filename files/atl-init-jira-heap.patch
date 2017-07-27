@@ -6,8 +6,8 @@
  
 +    atl_log "Setting JVM heap settings"
 +    sed -i \
-+        -e "s/^JVM_MINIMUM_MEMORY=.*/JVM_MINUMUM_MEMORY=\"${ATL_JVM_MIN_MEMORY}\"/" \
-+        -e "s/^JVM_MAXIMUM_MEMORY=.*/JVM_MAXUMUM_MEMORY=\"${ATL_JVM_MAX_MEMORY}\"/" \
++        -e "s/^JVM_MINIMUM_MEMORY=.*/JVM_MINIMUM_MEMORY=\"${ATL_JVM_MIN_MEMORY}\"/" \
++        -e "s/^JVM_MAXIMUM_MEMORY=.*/JVM_MAXIMUM_MEMORY=\"${ATL_JVM_MAX_MEMORY}\"/" \
 +	${ATL_JIRA_INSTALL_DIR}/bin/setenv.sh
 +
      chown -R "${ATL_JIRA_USER}":"${ATL_JIRA_USER}" "${ATL_JIRA_INSTALL_DIR}" 
