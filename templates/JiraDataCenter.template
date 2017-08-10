@@ -888,7 +888,7 @@
                                                     ]
                                                 ]
                                             },
-                                            ":/ /media/atl nfs4 noatime,intr,rsize=32768,wsize=32768 0 0 >>/etc/fstab"
+                                            ":/ /media/atl nfs4 noatime,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,minorversion=1 0 0 >>/etc/fstab"
                                         ]
                                     ]
                                 },
