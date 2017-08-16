@@ -97,7 +97,7 @@
                     "default": "Minimum JVM Heap Size"
                 },
                 "JVMHeapMaximum": {
-                    "default": "Minimum JVM Heap Size"
+                    "default": "Maximum JVM Heap Size"
                 },
                 "KeyName": {
                     "default": "Key Name *"
